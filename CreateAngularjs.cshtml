@@ -1,0 +1,416 @@
+@model Datalus.Web.Models.ViewModels.EmploymentsViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<head>
+    <link href="~/Content/ProfileStyleSheet.css" rel="stylesheet" />
+</head>
+
+
+<div class="row" data-ng-controller="employmentsController as dashboard">
+    <form id="employmentForm" role="form" name="dashboard.employmentsForm" ng-submit="dashboard.createEmployment()" novalidate>
+        <fieldset ng-disabled="dashboard.disableForm">
+
+            <div class="panel" data-fill-color="true">
+
+                <div class="datalusTopLogo">
+                    <p class="text-center p-4x">
+                        <img type="image/png" src="http://i.stack.imgur.com/zeklU.png" height="75">
+                    </p>
+                    <p class="text-center lead">Create/Edit Employment</p>
+                </div>
+
+                <div class=" col-md-6">
+                    <div class="col-md-12" style="padding-top:30px;">
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">StartDate</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                                <input type="date"
+                                       class="form-control ng-class:{'error': dashboard.showFormErrors && !dashboard.employmentsForm.StartDate.$valid}"
+                                       name="StartDate"
+                                       id="StartDate"
+                                       placeholder=""
+                                       data-ng-model="dashboard.employment.StartDate"
+                                       required>
+
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.StartDate.$error.required">Start Date is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">EndDate</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                                <input type="date"
+                                       class="form-control ng-class:{'error': dashboard.showFormErrors && !dashboard.employmentsForm.EndDate.$valid}"
+                                       name="Graduation Date"
+                                       id="EndDate"
+                                       placeholder=""
+                                       data-ng-model="dashboard.employment.EndDate">
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">Company Name</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="icon-tag"></i></span>
+                                <input type="text"
+                                       name="CompanyName"
+                                       id="CompanyName"
+                                       class="form-control"
+                                       placeholder="Company Name"
+                                       data-ng-model="dashboard.employment.companyName"
+                                       required>
+
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.CompanyName.$error.required">Company name is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">Job Title</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="icon-tag"></i></span>
+                                <input type="text"
+                                       name="JobTitle"
+                                       id="JobTitle"
+                                       class="form-control"
+                                       placeholder="Job Title"
+                                       data-ng-model="dashboard.employment.jobTitle"
+                                       required>
+
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.JobTitle.$error.required">Job Title is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">Department</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="icon-tag"></i></span>
+                                <input type="text"
+                                       name="Department"
+                                       id="Department"
+                                       class="form-control"
+                                       placeholder="Department "
+                                       data-ng-model="dashboard.employment.department"
+                                       required>
+
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.Department.$error.required">Department is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">Location</label>
+                            <div class="input-group input-group-in">
+                                <span class="input-group-addon"><i class="icon-tag"></i></span>
+                                <input type="text"
+                                       name="Location"
+                                       id="Location"
+                                       class="form-control"
+                                       placeholder="Location "
+                                       data-ng-model="dashboard.employment.location">
+                                <span class="form-control-feedback"></span>
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.Location.$error.required">Location is required</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group has-feedback">
+                            <label for="inputSelect">Summary of Job</label>
+                            <div class="input-group input-group-in">
+                                <input type="text"
+                                       name="SummaryOfJob"
+                                       id="SummaryOfJob"
+                                       ckeditor="dashboard.ckeditorOptions"
+                                       class="form-control"
+                                       placeholder="Summary Of Job "
+                                       data-ng-model="dashboard.employment.summaryOfJob">
+                                <span class="form-control-feedback"></span>
+                            </div>
+                            <div role="alert" class="help-inline error">
+                                <span class="error" ng-show="dashboard.showFormErrors && dashboard.employmentsForm.Summary.$error.required">Summary of job is required</span>
+                            </div>
+                        </div>
+
+                        <div class="pull-right mb-1x" id="formButtons">
+                            <button type="submit" id="createEmploymentButton" class="btn btn-primary">Submit</button>
+                            <button type="button" id="cmdDelete" class="btn btn-danger" ng-class="createController.deleteButtonClass" ng-click="createController.openModal()">Delete</button>
+                            <a href="/profiles/{{dashboard.$datalus.userprofileId}}/edit" id="cmdCancel" class="btn btn-default">Cancel</a>
+                            <button type="reset" id="cmdReset" class="btn btn-info" ng-click="dashboard.resetForm()" ng-class="dashboard.resetFormButton">Reset</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div><!-- /.form-group -->
+            <div class="alert " id="msgWindow"></div>
+        </fieldset>
+    </form>
+</div>
+
+<script type="text/ng-template" id="deleteEmploymentModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Are you sure?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Confirm Delete</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-click="modalCon.cancelDelete()" class="btn btn-default" id="cmdDeleteCancel">Cancel</button>
+        <button type="button" ng-click="modalCon.confirmDelete()" class="btn btn-primary" id="cmdDeleteConfirm">Delete</button>
+    </div>
+</script>
+
+<style type="text/css">
+    .accordionBar {
+        background-color: azure;
+        height: 40px;
+    }
+
+    .panel-heading {
+        padding: 0px;
+    }
+
+    .btn-icon.btn-default {
+        background-color: #819ac9;
+    }
+</style>
+
+
+@section pageInitScripts
+{
+    <script src="~/Scripts/ng/ckeditor/angular-ckeditor.js"></script>
+    <script type="text/javascript">
+        datalus.extraNgDependencies = ["ckeditor", "ui.bootstrap"]
+    </script>
+
+}
+
+@section Scripts {
+    <script src="//cdn.ckeditor.com/4.5.6/full/ckeditor.js"></script>
+
+    <script src="~/Scripts/datalus.services.employments.js"></script>
+    <script src="/Wrapkit/scripts/moment.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript"> datalus.page.employmentId = @Model.Id; </script>
+    <script type="text/javascript">datalus.page.userProfileId = @Model.UserProfileId;</script>
+    <script type="text/javascript">
+
+        (function () {
+            "use strict";
+
+            angular.module(APPNAME)
+                .factory('$employmentsService', EmploymentsServiceFactory);
+
+            EmploymentsServiceFactory.$inject = ['$baseService', '$datalus'];
+
+            function EmploymentsServiceFactory($baseService, $datalus) {
+                var employmentsServiceObject = datalus.services.employments;
+                var newService = $baseService.merge(true, {}, employmentsServiceObject, $baseService);
+                console.log(employmentsServiceObject);
+                return newService;
+            }
+        })();
+
+        (function () {
+            "use strict";
+
+            angular.module(APPNAME)
+                .controller('employmentsController', EmploymentsController);
+            angular.module(APPNAME)
+            .requires.push('ckeditor');
+
+            EmploymentsController.$inject = ['$scope', '$baseController', "$employmentsService"];
+
+            function EmploymentsController($scope, $baseController, $employmentsService) {
+
+                var vm = this;
+                vm.headingInfo = "Employments";
+                vm.employmentsForm = null;
+                vm.$employmentsService = $employmentsService;
+                vm.employment = null;
+                vm.$scope = $scope;
+                vm.showFormErrors = false;
+                vm.disableForm = false;
+
+
+                vm.onError = _onError;
+                vm.onCreateSuccess = _onCreateSuccess;
+                //vm.onEditSuccess = _onEditSuccess;
+                vm.onGetByIdSuccess = _onGetByIdSuccess;
+                vm.onUpdateSuccess = _onUpdateSuccess;
+                vm.deleteSuccess = _deleteSuccess;
+
+                vm.ckeditorOptions = {
+                    language: 'em',
+                    allowedContent: true,
+                    entities: false
+                };
+
+                $baseController.merge(vm, $baseController);
+                vm.notify = vm.$employmentsService.getNotifier($scope);
+
+
+                vm.createEmployment = _createEmployment;
+                vm.deleteEmployment = _deleteEmployment;
+                vm.editEmploymentPage = _editEmploymentPage;
+                vm.resetForm = _resetForm;
+
+                render();
+
+                function render() {
+                    if (datalus.page.employmentId || datalus.page.userProfileId> 0){
+                        vm.$employmentsService.getEmploymentById(datalus.page.employmentId, vm.onGetByIdSuccess, vm.onError);
+
+                    }
+                }
+
+                function _createEmployment(){
+                    vm.showFormErrors = true;
+                    if (vm.employmentsForm.$valid) {
+                        vm.employment.userProfileId = vm.$datalus.userProfileId;
+
+                        if (datalus.page.employmentId == 0){
+                            console.log("data is valid! go save this object -> ", vm.employment)
+                            vm.$employmentsService.createNewEmployment(vm.employment, vm.onCreateSuccess, vm.onError)
+
+                        }
+                        else{
+                            vm.$employmentsService.updateEmployment(datalus.page.employmentId, vm.employment, vm.onUpdateSuccess, vm.onError)
+                        }
+                    }
+                    else {
+                        console.log("form submitted with invalid data")
+                    }
+                }
+
+                function _onUpdateSuccess(){
+                    vm.notify(function(){
+                        vm.employment = data.items;
+                    });
+                    vm.$alertService.info("Update Success");
+                }
+
+
+                function _deleteEmployment(){
+                    vm.$employmentsService.onDeleteEmployment(datalus.page.employmentId, vm.deleteSuccess, vm.onError)
+                    vm.$alertService.success("Delete was Successful");
+
+                }
+
+
+                function _editEmploymentPage(){
+                    vm.employmentTitle = "Edit Employment";
+                    vm.submitButtonName = "Submit Changes";
+                    vm.deleteEmploymentButton = true;
+                    vm.resetButtonClass = "Reset";
+                }
+
+                function _resetForm(){
+                    vm.submitButtonName = "Submit"
+                    vm.employmentsForm.$setPristine();
+                    vm.employmentsForm.$setUntouched();
+                    vm.$alertService.info("Form reset");
+                }
+
+                function _onCreateSuccess(data, status, xhr){
+                    vm.notify(function () {
+                        vm.$log.log('post success... ' + data);
+                        vm.$alertService.success("Create was Successful");
+                        datalus.page.employmentId = data.item;
+                        vm.employment.id = data.item;
+                        vm.editEmploymentPage();
+                    });
+                }
+
+
+                function _onGetByIdSuccess(data, status, xhr) {
+                    vm.notify(function(){
+                        vm.employment = data.item;
+                    });
+                    console.log(data.item);
+                    vm.submitButtonName = "Submit Changes";
+
+
+                }
+
+                function _deleteSuccess(){
+                    vm.$alertService.success("Employment Deleted");
+                    vm.employmentsForm.$setPristine();
+                    vm.employmentsForm.$setUntouched();
+                    vm.disableForm = true;
+                }
+
+                function _deleteSuccess(data, status, xhr) {
+                    vm.$log.log('delete success... ' + data);
+                    vm.disableForm = true;
+                    vm.$alertService.success("Record Deleted");
+                }
+
+                function _onError(jqXHR, textStatus, errorThrown) {
+                    vm.notify(function(){
+                        vm.$alertService.info("An Error Occurred")
+                    })
+                }
+
+                function _openModal() {
+                    var modalInstance = vm.$uibModal.open({
+                        animation: true,
+                        templateUrl: 'deleteEmploymentModal.html',
+                        controller: 'deleteModalController as modalCon',
+                        size: 'sm',
+                    });
+
+                    modalInstance.result.then(function () {
+                        vm.deleteOfficeHour();
+                    });
+                }
+
+            }
+
+        })();
+
+        //Modal controller
+        (function () {
+            "use strict";
+
+            angular.module(APPNAME)
+                .controller('deleteModalController', DeleteModalController);
+
+            DeleteModalController.$inject = ['$scope', '$baseController', '$uibModalInstance']
+
+            function DeleteModalController($scope, $baseController, $uibModalInstance) {
+                var vm = this;
+
+                $baseController.merge(vm, $baseController);
+
+                vm.$scope = $scope;
+                vm.$uibModalInstance = $uibModalInstance;
+
+                vm.confirmDelete = function () {
+                    vm.$uibModalInstance.close();
+                };
+
+                vm.cancelDelete = function () {
+                    vm.$uibModalInstance.dismiss();
+                };
+            }
+        })();
+
+    </script>
+}
+
+
+
