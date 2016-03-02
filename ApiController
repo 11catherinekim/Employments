@@ -1,0 +1,87 @@
+using Datalus.Web.Domain;
+using Datalus.Web.Models.Requests;
+using Datalus.Web.Models.Requests.Tests;
+using Datalus.Web.Models.Responses;
+using Datalus.Web.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+
+
+namespace Datalus.Web.Controllers.Api
+{
+    [RoutePrefix("api/employments")]
+    public class EmploymentsApiController : BaseApiController
+    {
+        [Route, HttpPost]
+        public HttpResponseMessage Add(EmploymentsAddRequest model)
+        {
+            try
+            {
+                if (!IsModelValid(model))
+                {
+                    return GetInvalidResponse(model);
+                }
+
+                ItemResponse<int> response = new ItemResponse<int>();
+                response.Item = EmploymentsService.AddEmployments(model);
+                return Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                return GetErrorResponse(ex);
+            }
+        }
+
+        [Route("{id:int}"), HttpPut]
+        public HttpResponseMessage Update(EmploymentsUpdateRequest model, int id)
+        {
+            if (ModelState.IsValid)
+            {
+                EmploymentsService.UpdateEmployments(model);
+                SuccessResponse response = new SuccessResponse();
+                return Request.CreateResponse(response);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+        }
+
+        [Route("{id:int}"), HttpGet]
+        public HttpResponseMessage SelectByIdEmployments(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            Employments e = EmploymentsService.GetEducation(id);
+
+            ItemResponse<Employments> response = new ItemResponse<Employments>();
+            response.Item = e;
+            return Request.CreateResponse(response);
+        }
+
+        [Route, HttpGet]
+        public HttpResponseMessage GetAllEmployments()
+        {
+            ItemsResponse<Employments> response = new ItemsResponse<Employments>();
+            response.Items = EmploymentsService.GetAllEmployments();
+            return Request.CreateResponse(response);
+        }
+
+
+        [Route("{id:int}"), HttpDelete]
+        public HttpResponseMessage DeleteEmployments(int id)
+        {
+            EmploymentsService.DeleteEmployments(id);
+            SuccessResponse response = new SuccessResponse();
+            return Request.CreateResponse(response);
+        }
+
+
+    }
+}
